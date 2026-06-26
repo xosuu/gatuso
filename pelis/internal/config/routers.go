@@ -9,12 +9,13 @@ import (
 func LoadRouters(controller *controler.MovieController)(*gin.Engine ){
 
 	routers := gin.Default() 
-
-	routers.GET("api/movies/", controller.GetAllMovies)
-	routers.GET("api/movies/:id", controller.GetById)
-	routers.POST("api/movies", controller.InsertMovie)
-	routers.DELETE("api/movies/:id", controller.DeleteById)
-	routers.PUT("api/movies", controller.UpdateMovie)
+	api := routers.Group("/api")
+	
+	api.GET("/movies", controller.GetAllMovies)
+	api.GET("/movies/:id", controller.GetById)
+	api.POST("/movies", controller.InsertMovie)
+	api.DELETE("movies/:id", controller.DeleteById)
+	api.PUT("/movies", controller.UpdateMovie)
 
 	return routers
 }
