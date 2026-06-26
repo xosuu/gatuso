@@ -1,7 +1,6 @@
 package movie
 
 import (
-
 	"gorm.io/gorm"
 )
 
@@ -15,6 +14,7 @@ type MovieRepository struct{
 
 func(m *MovieRepository) GetAllMovies()([]Movie, error){
 	var item []Movie
+	
 	e := m.Db.Find(&item)
 	if(e.Error != nil){
 		return nil, e.Error
@@ -28,6 +28,7 @@ func (m *MovieRepository) GetById(id int)(Movie, error){
 	if(err.Error != nil){
 		return movie, err.Error
 	}
+	
 	return movie, nil
 
 }
@@ -41,5 +42,26 @@ func (m *MovieRepository) Save(movie *Movie)(error){
 	
 }
 
+func (m *MovieRepository) DeleteById(id int)error{
+	var movie Movie
+	err := m.Db.First(&movie, id)
+	if( err.Error != nil){
+		return err.Error
+	}
+	m.Db.Delete(&movie)
+	return nil
+
+}
+
+
+func (m *MovieRepository) Update(id int, newMovie *Movie) error{
+	var movie *Movie
+	resp := m.Db.Model(&movie).Where("id = ?", id).Updates(&newMovie)
+	if(resp.Error != nil){
+		return resp.Error
+	}
+	return nil
+
+}
 
 

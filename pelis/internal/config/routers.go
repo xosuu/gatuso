@@ -13,6 +13,8 @@ func LoadRouters(controller *controler.MovieController)(*gin.Engine ){
 	routers.GET("api/movies/", controller.GetAllMovies)
 	routers.GET("api/movies/:id", controller.GetById)
 	routers.POST("api/movies", controller.InsertMovie)
+	routers.DELETE("api/movies/:id", controller.DeleteById)
+	routers.PUT("api/movies", controller.UpdateMovie)
 
 	return routers
 }
