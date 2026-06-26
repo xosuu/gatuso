@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"pelis/internal/repository"
+	"pelis/internal/domain/models"
 	"pelis/internal/domain/movie"
 	"github.com/gin-gonic/gin"
 )
@@ -13,7 +15,7 @@ import (
 
 
 type MovieController struct{
-	Repo movie.MovieRepository
+	Repo repository.MovieRepository
 }
 
 type obj struct{
@@ -24,7 +26,7 @@ type obj struct{
 func (m *MovieController) GetById(c *gin.Context){
 	id := c.Param("id")
 	idd, _ := strconv.Atoi(id)
-	Movie, err := m.Repo.GetById(idd)
+	Movie, err := m.Repo.GetById(uint(idd))
 	if(err != nil){
 		c.IndentedJSON(http.StatusNotFound, &obj{Message: "No existe"})
 		return
@@ -72,7 +74,7 @@ func (m *MovieController)InsertMovie(c *gin.Context){
 		return
 	}
 
-	Movie := &movie.Movie{Name: MoviePost.Name, MovieUrl: MoviePost.MovieUrl}
+	Movie := &model.Movie{Name: MoviePost.Name, MovieUrl: MoviePost.MovieUrl}
 	err := m.Repo.Save(Movie)
 	if (err != nil){
 		c.IndentedJSON(http.StatusNotFound, &obj{Message: "Error jijo"})
@@ -94,7 +96,7 @@ func (m *MovieController)InsertMovie(c *gin.Context){
 func (m *MovieController)DeleteById(c *gin.Context){
 	id := c.Param("id")
 	idd, _ := strconv.Atoi(id)
-	resp := m.Repo.DeleteById(idd)
+	resp := m.Repo.DeleteById(uint(idd))
 	if(resp != nil){
 		c.IndentedJSON(http.StatusNotFound, &obj{Message: "Not found"})
 		return

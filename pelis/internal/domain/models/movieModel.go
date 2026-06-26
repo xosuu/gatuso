@@ -1,7 +1,8 @@
-package movie
+package model
 
 import (
-	
+	"pelis/internal/domain/movie"
+
 	"gorm.io/gorm"
 )
 
@@ -16,12 +17,13 @@ type Movie struct{
 	Duration string 
 	Sinopsis string 
 	Genre string 
-
-	
+	UserID uint 
+	User User
 }
 
-func (m *Movie)Update(newData *MovieUpdate)*Movie{
-	m.Name =  m.VerifyBlank(newData.Name, m.Name)
+func (m *Movie)Update (newData *movie.MovieUpdate)*Movie{
+	
+	m.Name =  m.VerifyBlank(newData.GetName(), m.Name)
 	m.MovieUrl = m.VerifyBlank(newData.MovieUrl, m.MovieUrl)
 	m.PosterUrl = m.VerifyBlank(newData.PosterUrl, m.PosterUrl)
 	m.Duration = m.VerifyBlank(newData.Duration, m.Duration)

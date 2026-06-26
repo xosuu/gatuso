@@ -5,7 +5,8 @@ import (
 	"net/http"
 	"pelis/internal/config"
 	"pelis/internal/controler"
-	"pelis/internal/domain/movie"
+	"pelis/internal/repository"
+	"pelis/internal/domain/models"
 	"time"
 
 	"gorm.io/gorm"
@@ -13,16 +14,16 @@ import (
 
 var DB *gorm.DB
 func Init(){
-
+	
 	port := ":3006"
 	DB = config.LoadDatabase()
-	Repo := &movie.MovieRepository{Db: DB}
+	Repo := &repository.MovieRepository{Db: DB}
 	Controller := &controler.MovieController{Repo: *Repo}
 	router := config.LoadRouters(Controller)
 
-	DB.AutoMigrate(&movie.Movie{})
-
-
+	DB.AutoMigrate(&model.Movie{})
+	
+	
 	server := &http.Server{
 		Addr: port,
 		Handler: router,

@@ -1,7 +1,8 @@
-package movie
+package repository
 
 import (
 	"gorm.io/gorm"
+	"pelis/internal/domain/models"
 )
 
 
@@ -12,8 +13,8 @@ type MovieRepository struct{
 
 
 
-func(m *MovieRepository) GetAllMovies()([]Movie, error){
-	var item []Movie
+func(m *MovieRepository) GetAllMovies()([]model.Movie, error){
+	var item []model.Movie
 	
 	e := m.Db.Find(&item)
 	if(e.Error != nil){
@@ -22,8 +23,8 @@ func(m *MovieRepository) GetAllMovies()([]Movie, error){
 	return item, nil
 }
 
-func (m *MovieRepository) GetById(id int)(Movie, error){
-	var movie Movie
+func (m *MovieRepository) GetById(id uint)(model.Movie, error){
+	var movie model.Movie
 	err := m.Db.First(&movie, id)
 	if(err.Error != nil){
 		return movie, err.Error
@@ -33,7 +34,7 @@ func (m *MovieRepository) GetById(id int)(Movie, error){
 
 }
 
-func (m *MovieRepository) Save(movie *Movie)(error){
+func (m *MovieRepository) Save(movie *model.Movie)(error){
 	e := m.Db.Create(movie)
 	if(e.Error != nil){
 		return e.Error
@@ -42,8 +43,8 @@ func (m *MovieRepository) Save(movie *Movie)(error){
 	
 }
 
-func (m *MovieRepository) DeleteById(id int)error{
-	var movie Movie
+func (m *MovieRepository) DeleteById(id uint)error{
+	var movie model.Movie
 	err := m.Db.First(&movie, id)
 	if( err.Error != nil){
 		return err.Error
@@ -54,8 +55,8 @@ func (m *MovieRepository) DeleteById(id int)error{
 }
 
 
-func (m *MovieRepository) Update(id int, newMovie *Movie) error{
-	var movie *Movie
+func (m *MovieRepository) Update(id uint, newMovie *model.Movie) error{
+	var movie *model.Movie
 	resp := m.Db.Model(&movie).Where("id = ?", id).Updates(&newMovie)
 	if(resp.Error != nil){
 		return resp.Error
